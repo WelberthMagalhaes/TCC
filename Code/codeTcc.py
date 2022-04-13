@@ -10,7 +10,7 @@ df = pd.read_excel("x", sheet_name=0)
 	
 entrada.getN
 
-def conjuntos:
+#def conjuntos: -> passar para classe Problema tudo abaixo
 	
 	df = pd.read_excel("/content/drive/MyDrive/Colab Notebooks/input.xls", sheet_name=0)
 	
@@ -57,5 +57,4 @@ def conjuntos:
 	#retornar as demandas média esperadas
 	#for i in N
 	#	print(dit[i])
-
-	#se tiver histórico anual fazer a média e desvio padrão entre os meses#
+	#se tiver histórico anual fazer a média e desvio padrão entre os meses

@@ -19,3 +19,4 @@ class Problema:
 		self.A = df.iat[5,1]
 		#--------------------
 		
+		#TODO continuar trazer as linhas de Conjunto no do arquivo codeTcc
