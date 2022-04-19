@@ -1,9 +1,48 @@
 import pandas as pd
 from problema import Problema
 import numpy as np
+from mip import *
 
 entrada = Problema('C:/Users/wheidermagal/OneDrive - DXC Production/Documents/Pessoal/TCC/inputs/input.xls')
-	
+
+# ENTRADAS
+N = entrada.N
+T = int(entrada.T)
+c = entrada.ci
+h = entrada.hi
+
+m = Model("MIN custos totais") # Nome do modelo
+
+x = {(i, j): m.add_var(obj=0, var_type=INTEGER, name="x(%s,%d)" % (i, j))
+	for i in N 
+		for j in range(1,T+1)}
+
+y = {(i, j): m.add_var(obj=0, var_type=INTEGER, name="y(%s,%d)" % (i, j))
+	for i in N
+		for j in range(1,T+1)}
+
+
+m.objective = minimize( xsum((c[i] * x[i,j]) + (h[i]*y[i,j]) for i in N for j in range(1,T+1)))
+
+#acessar variável
+print(x['a1',1])
+m.write("teste.lp")
+
+#print("Conjunto de Toners:"+str(entrada.N))
+
+
+
+
+
+
+
+#print("Volume ocupado pelo toner i:")
+#for toner, volume in entrada.vi.items():
+#	print(toner, volume)
+
+#print(entrada.dit['b1'][0])
+
+"""	
 print("Conjunto de Toners:"+str(entrada.N))
 print("Períodos:"+str(entrada.T))
 print("Armazenamento:"+str(entrada.A))
@@ -33,6 +72,8 @@ for toner, custounit in entrada.ci.items():
 	print(toner, custounit)
 print("*------------------------------*")
 print(entrada.ci.get('b2'))
+
+"""
 
 	# busca:  dit['a1'][0 ou 1]
 
