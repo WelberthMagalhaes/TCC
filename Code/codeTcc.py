@@ -1,56 +1,38 @@
 import pandas as pd
-from Code.problema import Problema
+from problema import Problema
 import numpy as np
 
-
-#criar classe entrada no dessa função
-entrada = Problema('/content/drive/MyDrive/Colab Notebooks/input.xls')
-
-df = pd.read_excel("x", sheet_name=0)
+entrada = Problema('C:/Users/wheidermagal/OneDrive - DXC Production/Documents/Pessoal/TCC/inputs/input.xls')
 	
-entrada.getN
-
-#def conjuntos: -> passar para classe Problema tudo abaixo
-	
-	df = pd.read_excel("/content/drive/MyDrive/Colab Notebooks/input.xls", sheet_name=0)
-	
-	# N - Conjunto de Toners #Validado 16/12
-	aux = df.columns.to_list()
-	aux.pop(0)
-	N = aux
-	#-------------
-
-	# T - Número de períodos #Validado 16/12
-	T = df.iat[3,1] 
-	#-------------
-
-	# A - Capacidade de Armazenamento #Validado 16/12
-	A = df.iat[5,1]
-	#-------------
-	
-	# si - Estoque Inicial
-	
-	#-------------
-
-	# vi - Volume ocupado por cada toner #Validado 16/12
-	df = pd.read_excel("/content/drive/MyDrive/Colab Notebooks/input.xls", sheet_name=1)
-
-	vi = list(df['Volume'])
-	#-------------
-
-	# eit - margem mínima média do toner i no período t (estoque de segurança) #Validado 16/12
-	df = pd.read_excel("/content/drive/MyDrive/Colab Notebooks/input.xls", sheet_name=2)
-
-	eit = {df.values[i][0] : df.values[i][1] for i in range(df['toner'].size)}
-
-
-	#-------------
-
-	# dit demanda média esperada do toner i no período t  #Validado 16/12
-
-	df = pd.read_excel("/content/drive/MyDrive/Colab Notebooks/input.xls", sheet_name=3)
-
-	dit = {df.values[i][0] : df.values[i][1:] for i in range(df['toner'].size)}
+print("Conjunto de Toners:"+str(entrada.N))
+print("Períodos:"+str(entrada.T))
+print("Armazenamento:"+str(entrada.A))
+print("Volume ocupado pelo toner i:")
+for toner, volume in entrada.vi.items():
+	print(toner, volume)
+print("*------------------------------*")
+print("Margem minima:")
+for toner, margem in entrada.eit.items():
+	print(toner, margem)
+print("*------------------------------*")
+print("Demanda esperada:")
+for toner, demanda in entrada.dit.items():
+	print(toner, demanda)
+print(entrada.dit['b1'][1])
+print("*------------------------------*")
+print("Estoque inicial:")
+for toner, einicial in entrada.sit.items():
+	print(toner, einicial)
+print("*------------------------------*")
+print("Custo de capital:")
+for toner, custo in entrada.hi.items():
+	print(toner, custo)
+print("*------------------------------*")
+print("Custo unitário de cada toner:")
+for toner, custounit in entrada.ci.items():
+	print(toner, custounit)
+print("*------------------------------*")
+print(entrada.ci.get('b2'))
 
 	# busca:  dit['a1'][0 ou 1]
 
