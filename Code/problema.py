@@ -29,7 +29,7 @@ class Problema:
 		s = s.drop('Conjunto de Toners')
 		s = s.drop(columns=0)
 		ind = s.index.to_list()
-		self.sit = {ind[i] : s.values[i][0] for i in range(s[1].size)}
+		self.si = {ind[i] : s.values[i][0] for i in range(s[1].size)}
 		#--------------------
 
 		# ci - Custo unitário do toner i
@@ -47,15 +47,15 @@ class Problema:
 		self.vi = {df.values[i][0] : df.values[i][1] for i in range(df['toner'].size)}
 		#--------------------
 
-		# eit - margem mínima média do toner i no período t (estoque de segurança) #Validado 16/12
+		# ei - margem mínima média do toner i no período t (estoque de segurança) #Validado 16/12
 		df = pd.read_excel(arq, sheet_name=2)
-		self.eit = {df.values[i][0] : df.values[i][1] for i in range(df['toner'].size)}
+		self.ei = {df.values[i][0] : df.values[i][1] for i in range(df['toner'].size)}
 		#--------------------
 		
 		# dit - demanda média esperada do toner i no período t  #Validado 16/12
 		df = pd.read_excel(arq, sheet_name=3)
 		col = int(self.T+1)
-		self.dit = {df.values[i][0] : df.values[i][1:col] for i in range(df['toner'].size)}
+		self.di = {df.values[i][0] : df.values[i][1:col] for i in range(df['toner'].size)}
 		#--------------------
 
 		# hi - Custo de capital do estoque por unidade do toner i
