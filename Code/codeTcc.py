@@ -1,10 +1,23 @@
 from xml.sax.handler import EntityResolver
+from openpyxl import Workbook
 import pandas as pd
 from problema import Problema
 import numpy as np
 from mip import *
+import openpyxl
+import string
 
 entrada = Problema('C:/Users/wheidermagal/OneDrive - DXC Production/Documents/Pessoal/TCC/inputs/input.xls')
+def gravaResultado():
+	qtdCompradaX = pd.DataFrame(index=N, columns=range(1,T))
+	qtdEstocadaY = pd.DataFrame(index=N, columns=range(1,T))
+	for t in range(1,T):
+		for i in N:
+			qtdCompradaX.at[i,t] = x[i,t].x
+			qtdEstocadaY.at[i,t] = y[i,t].x
+
+	qtdCompradaX.to_excel('x.xlsx')
+	qtdEstocadaY.to_excel('y.xlsx')
 
 # ENTRADAS
 N = entrada.N
@@ -52,17 +65,25 @@ m += (xsum( y[i,t] * v[i] for i in N for t in range(1,T)))<= A
 for i in N:
 	for t in range(1,T):
 		m += x[i,t] >=0
+
+
 m.optimize()
 
-#acessar variável
-print(x['a1',0])
 m.write("teste.lp")
 m.write("solucao.sol")
+gravaResultado()
 
-#print("Conjunto de Toners:"+str(entrada.N))
+#acessar variável
+#print(x['a1',0])
 
+#print("X:"+"\n" + str(qtdCompradaX.head))
+#print("Y:"+"\n" + str(qtdEstocadaY.to_string))
 
+#qtdCompradaX.to_csv('x.csv')
+#qtdEstocadaY.to_csv('y.csv')
 
+#TODO analisar se o resultado faz sentido; criar alguma visualização; pensar em gerar novas instâncias aleatórias
+#range(0.2, 0.7)*
 
 
 
