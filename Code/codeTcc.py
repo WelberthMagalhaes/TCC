@@ -7,6 +7,7 @@ from mip import *
 import openpyxl
 import string
 
+
 entrada = Problema('C:/Users/wheidermagal/OneDrive - DXC Production/Documents/Pessoal/TCC/inputs/input.xls')
 def gravaResultado():
 	qtdCompradaX = pd.DataFrame(index=N, columns=range(1,T))
@@ -41,7 +42,7 @@ y = {(i, j): m.add_var(obj=0, var_type=INTEGER, name="y(%s,%d)" % (i, j))
 		for j in range(T)}
 
 
-m.objective = minimize( xsum((c[i] * x[i,j]) + (h[i]*y[i,j]) for i in N for j in range(T)))
+m.objective = minimize( xsum((c[i][j-1] * x[i,j]) + (h[i]*y[i,j]) for i in N for j in range(T)))
 
 # Restrição 1: Insere o estque inicial
 for i in N:
@@ -82,7 +83,7 @@ gravaResultado()
 #qtdCompradaX.to_csv('x.csv')
 #qtdEstocadaY.to_csv('y.csv')
 
-#TODO analisar se o resultado faz sentido; criar alguma visualização; pensar em gerar novas instâncias aleatórias
+#TODO Colocar o custo dos toners por período também e criar dicionário| analisar se o resultado faz sentido; criar alguma visualização; pensar em gerar novas instâncias aleatórias
 #range(0.2, 0.7)*
 
 
