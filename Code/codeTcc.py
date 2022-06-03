@@ -67,73 +67,8 @@ for i in N:
 	for t in range(1,T):
 		m += x[i,t] >=0
 
-
-m.write("teste.lp")
 m.optimize()
 m.write("solucao.sol")
-
+m.write("teste.lp")
 
 gravaResultado()
-
-# quando alterar o T eu uso uma função para gerar todas as instâncias de entrada de acordo com o numero T
-
-#acessar variável
-#print(x['a1',0])
-
-#print("X:"+"\n" + str(qtdCompradaX.head))
-#print("Y:"+"\n" + str(qtdEstocadaY.to_string))
-
-#qtdCompradaX.to_csv('x.csv')
-#qtdEstocadaY.to_csv('y.csv')
-
-#TODO Colocar o custo dos toners por período também e criar dicionário| analisar se o resultado faz sentido; criar alguma visualização; pensar em gerar novas instâncias aleatórias
-#range(0.2, 0.7)*
-
-
-
-
-#print("Volume ocupado pelo toner i:")
-#for toner, volume in entrada.vi.items():
-#	print(toner, volume)
-
-#print(entrada.dit['b1'][0])
-
-"""	
-print("Conjunto de Toners:"+str(entrada.N))
-print("Períodos:"+str(entrada.T))
-print("Armazenamento:"+str(entrada.A))
-print("Volume ocupado pelo toner i:")
-for toner, volume in entrada.vi.items():
-	print(toner, volume)
-print("*------------------------------*")
-print("Margem minima:")
-for toner, margem in entrada.eit.items():
-	print(toner, margem)
-print("*------------------------------*")
-print("Demanda esperada:")
-for toner, demanda in entrada.dit.items():
-	print(toner, demanda)
-print(entrada.dit['b1'][1])
-print("*------------------------------*")
-print("Estoque inicial:")
-for toner, einicial in entrada.sit.items():
-	print(toner, einicial)
-print("*------------------------------*")
-print("Custo de capital:")
-for toner, custo in entrada.hi.items():
-	print(toner, custo)
-print("*------------------------------*")
-print("Custo unitário de cada toner:")
-for toner, custounit in entrada.ci.items():
-	print(toner, custounit)
-print("*------------------------------*")
-print(entrada.ci.get('b2'))
-
-"""
-
-	# busca:  dit['a1'][0 ou 1]
-
-	#retornar as demandas média esperadas
-	#for i in N
-	#	print(dit[i])
-	#se tiver histórico anual fazer a média e desvio padrão entre os meses
