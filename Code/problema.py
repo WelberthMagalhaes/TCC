@@ -6,66 +6,8 @@ import numpy as np
 import random
 import openpyxl
 
-#taxa di aleatoria e formula do custo capital
+
 class Problema:
-
-	"""
-	def __init__(self, arq):
-		
-		#leitura do arquivo
-		df = pd.read_excel(arq, sheet_name=0)
-		book = openpyxl.load_workbook(arq, data_only=True)
-
-		# N - Conjunto de Toners
-		aux = df.columns.to_list()
-		aux.pop(0)
-		self.N = aux
-		#--------------------
-
-		# T - Número de períodos
-		self.T = df.iat[3,1] 
-		#--------------------
-
-		# A - Capacidade de Armazenamento
-		self.A = df.iat[5,1]
-		#--------------------
-
-		#si - Estoque inicial do toner i
-		s = df
-		s = s.T
-		s = s.drop('Conjunto de Toners')
-		s = s.drop(columns=0)
-		ind = s.index.to_list()
-		self.si = {ind[i] : s.values[i][0] for i in range(s[1].size)}
-		#--------------------
-		
-		col = int(self.T+1)
-		# ci - Custo unitário do toner i
-		df = pd.read_excel(arq, sheet_name=5)
-		self.ci = {df.values[i][0] : df.values[i][1:col] for i in range(df['toner'].size)}
-		#--------------------
-
-		# vi - Volume ocupado por cada toner #Validado 16/12
-		df = pd.read_excel(arq, sheet_name=1)
-		self.vi = {df.values[i][0] : df.values[i][1] for i in range(df['toner'].size)}
-		#--------------------
-
-		# ei - margem mínima média do toner i no período t (estoque de segurança) #Validado 16/12
-		df = pd.read_excel(arq, sheet_name=2)
-		self.ei = {df.values[i][0] : df.values[i][1] for i in range(df['toner'].size)}
-		#--------------------
-
-		
-		# dit - demanda média esperada do toner i no período t  #Validado 16/12
-		df = pd.read_excel(arq, sheet_name=3)
-		self.di = {df.values[i][0] : df.values[i][1:col] for i in range(df['toner'].size)}
-		#--------------------
-
-		# hi - Custo de capital do estoque por unidade do toner i
-		df = pd.read_excel(arq, sheet_name=4)
-		self.hi = {df.values[i][0] : df.values[i][1:col] for i in range(df['toner'].size)}
-		#--------------------
-	"""
 
 	def __init__(self, arq):
 
@@ -131,7 +73,7 @@ class Problema:
 			return aleatorio
 
 		#gerando dados aleatórios
-		arq = geraAleatorios(arq)
+		#arq = geraAleatorios(arq)
 		
 		#leitura do arquivo
 		df = pd.read_excel(arq, sheet_name=0)
