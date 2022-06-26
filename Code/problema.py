@@ -1,8 +1,4 @@
-from ast import While
-from ctypes import sizeof
-from turtle import home
 import pandas as pd
-import numpy as np
 import random
 import openpyxl
 

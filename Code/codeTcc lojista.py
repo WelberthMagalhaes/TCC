@@ -2,6 +2,7 @@ import pandas as pd
 from problema import Problema
 from mip import *
 
+
 entrada = Problema('inputs/input.xlsx')
 def gravaResultado():
 	qtdCompradaX = pd.DataFrame(index=N, columns=range(1,T))
@@ -65,7 +66,20 @@ for i in N:
 	for t in range(1,T):
 		m += x[i,t] >=0
 
+
+#restrição para garantir que a quantidade comprada seja igual a demanda
+for i in N:
+	for j in range(1,T):
+		m += x[i,t] == d[i][t-1]
+
+#restrição para garantir que a quantidade estocada seja igual o estoque mínimo
+for i in N:
+	for j in range(1,T):
+		m += y[i,t] == e[i]
+
+
 m.optimize()
+gravaResultado()
 m.write("solucao.sol")
 m.write("teste.lp")
 
