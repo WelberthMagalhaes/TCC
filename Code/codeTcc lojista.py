@@ -68,14 +68,30 @@ for i in N:
 
 
 #restrição para garantir que a quantidade comprada seja igual a demanda
+aux = s
+
 for i in N:
-	for j in range(1,T):
-		m += x[i,t] == d[i][t-1]
+	if(aux[i]>=(d[i][0]+e[i])):
+		m+= x[i,1] == 0
+		aux[i] = aux[i] - d[i][0] - e[i]
+	else:
+		m += x[i,1] == ((d[i][0] +e[i])  - aux[i])
+		aux[i] = 0
+
+	for j in range(2,T):
+		if(aux[i]>=(d[i][j-1])):
+			m+= x[i,j] == 0
+			aux[i] = aux[i] - d[i][j-1]
+		else:
+			m += x[i,j] == ((d[i][j-1]) - aux[i])
+			aux[i] = 0
+			
 
 #restrição para garantir que a quantidade estocada seja igual o estoque mínimo
-for i in N:
+"""for i in N:
 	for j in range(1,T):
-		m += y[i,t] == e[i]
+		m += y[i,j] == e[i]
+"""
 
 
 m.optimize()
