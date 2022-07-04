@@ -2,8 +2,9 @@ import pandas as pd
 from problema import Problema
 from mip import *
 
-entrada = Problema('inputs/input.xlsx')
+# entrada = Problema('inputs/input.xlsx')
 # entrada = Problema('inputs/input-sem-estoque-inicial.xlsx')
+entrada = Problema('inputs/Graficos/aleatorio-20-toners-24-meses.xlsx')
 def gravaResultado():
 	qtdCompradaX = pd.DataFrame(index=N, columns=range(1,T+1))
 	qtdEstocadaY = pd.DataFrame(index=N, columns=range(1,T+1))
@@ -33,6 +34,7 @@ x = {(i, j): m.add_var(obj=0, var_type=INTEGER, lb=0.0, name="x(%s,%d)" % (i, j)
 y = {(i, j): m.add_var(obj=0, var_type=INTEGER, lb=0.0, name="y(%s,%d)" % (i, j)) for i in N for j in range(0, T+1)}
 
 m.objective = minimize( xsum((c[i][j-1] * x[i,j]) + (h[i][j-1]*y[i,j]) for i in N for j in range(1, T+1)))
+# m.objective = minimize( xsum((c[i][j-1] * x[i,j]) for i in N for j in range(1, T+1)))
 
 # Restrição 1: Insere o estque inicial
 for i in N:
