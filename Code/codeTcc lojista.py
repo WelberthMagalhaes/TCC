@@ -2,12 +2,12 @@ import pandas as pd
 from problema import Problema
 from mip import *
 
-
 entrada = Problema('inputs/input.xlsx')
+# entrada = Problema('inputs/input-sem-estoque-inicial.xlsx')
 def gravaResultado():
-	qtdCompradaX = pd.DataFrame(index=N, columns=range(1,T))
-	qtdEstocadaY = pd.DataFrame(index=N, columns=range(1,T))
-	for t in range(1,T):
+	qtdCompradaX = pd.DataFrame(index=N, columns=range(1,T+1))
+	qtdEstocadaY = pd.DataFrame(index=N, columns=range(1,T+1))
+	for t in range(1,T+1):
 		for i in N:
 			qtdCompradaX.at[i,t] = x[i,t].x
 			qtdEstocadaY.at[i,t] = y[i,t].x
@@ -17,7 +17,7 @@ def gravaResultado():
 
 # ENTRADAS
 N = entrada.N
-T = int(entrada.T+1)
+T = entrada.T
 c = entrada.ci
 h = entrada.hi
 s = entrada.si
@@ -26,77 +26,53 @@ e = entrada.ei
 v = entrada.vi
 A = entrada.A
 
+m = Model("MIN custos totais", solver_name="CBC") # Nome do modelo
 
-m = Model("MIN custos totais") # Nome do modelo
+x = {(i, j): m.add_var(obj=0, var_type=INTEGER, lb=0.0, name="x(%s,%d)" % (i, j)) for i in N for j in range(1, T+1)}
 
-x = {(i, j): m.add_var(obj=0, var_type=INTEGER, name="x(%s,%d)" % (i, j))
-	for i in N 
-		for j in range(T)}
+y = {(i, j): m.add_var(obj=0, var_type=INTEGER, lb=0.0, name="y(%s,%d)" % (i, j)) for i in N for j in range(0, T+1)}
 
-y = {(i, j): m.add_var(obj=0, var_type=INTEGER, name="y(%s,%d)" % (i, j))
-	for i in N
-		for j in range(T)}
-
-
-#m.objective = minimize( xsum((c[i][j-1] * x[i,j]) + (h[i][j-1]*y[i,j]) for i in N for j in range(T)))
-
-#modelo alterado para considerar somente o custo do toner
-m.objective = minimize( xsum((c[i][j-1] * x[i,j]) for i in N for j in range(T)))
-
+m.objective = minimize( xsum((c[i][j-1] * x[i,j]) + (h[i][j-1]*y[i,j]) for i in N for j in range(1, T+1)))
 
 # Restrição 1: Insere o estque inicial
 for i in N:
-	m += y[i,0] == s[i]
+	m.add_constr(y[i,0] == s[i], name="estq_ini(%s)" % i)
 
-# Restrição 2: equaliza o estoque. Estoque atual = estoque inicial + Qtd comprada - demanda
+# Restrição 2: equaliza o estoque. Estoque atual = estoque anterior + Qtd comprada - demanda
 for i in N:
-	for t in range(1,T):
-		m += y[i,t] == y[i,t-1] + x[i,t] - d[i][t-1]
+	for t in range(1,T+1):
+		m.add_constr(y[i,t] == y[i,t-1] + x[i,t] - d[i][t-1], name="calc_estq(%s,%d)" % (i,t))
 
-# Restrição 3: exige que a quantidade armazenada seja igual ou maior o estoque de segurança
+# Restrição 3: exige que a quantidade armazenada seja maior ou igual do que o estoque de segurança
 for i in N:
-	for t in range(1,T):
-		m += y[i,t] >= e[i]
+	for t in range(1,T+1):
+		m.add_constr(y[i,t] >= e[i], name="estq_seg(%s,%d)" % (i,t))
 
 # Restrição 4: exige que o volume de toner armazenado seja menor ou igual ao espaço para armazenamento
-m += (xsum( y[i,t] * v[i] for i in N for t in range(1,T)))<= A
-
-# Restrição 5: Quantidade comprada não pode ser menor que zero
-for i in N:
-	for t in range(1,T):
-		m += x[i,t] >=0
-
+for t in range(1,T+1):
+	m.add_constr(xsum(y[i,t] * v[i] for i in N) <= A, name="cap_tempo(%d)" % (t))
 
 #restrição para garantir que a quantidade comprada seja igual a demanda
 aux = s
-
 for i in N:
-	if(aux[i]>=(d[i][0]+e[i])):
-		m+= x[i,1] == 0
+	if (aux[i] >= (d[i][0] + e[i])):
+		x[i,1].lb = x[i,1].ub = 0.0
 		aux[i] = aux[i] - d[i][0] - e[i]
 	else:
-		m += x[i,1] == ((d[i][0] +e[i])  - aux[i])
+		x[i,1].lb = x[i,1].ub = d[i][0] + e[i] - aux[i]
 		aux[i] = 0
 
-	for j in range(2,T):
-		if(aux[i]>=(d[i][j-1])):
-			m+= x[i,j] == 0
+	for j in range(2, T+1):
+		if (aux[i] >= d[i][j-1]):
+			x[i,j].lb = x[i,j].ub = 0.0
 			aux[i] = aux[i] - d[i][j-1]
 		else:
-			m += x[i,j] == ((d[i][j-1]) - aux[i])
+			x[i,j].lb = x[i,j].ub = d[i][j-1] - aux[i]
 			aux[i] = 0
 			
 
-#restrição para garantir que a quantidade estocada seja igual o estoque mínimo
-"""for i in N:
-	for j in range(1,T):
-		m += y[i,j] == e[i]
-"""
-
-
+m.write("modelo.lp")
 m.optimize()
-gravaResultado()
 m.write("solucao.sol")
-m.write("teste.lp")
 
 gravaResultado()

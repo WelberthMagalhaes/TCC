@@ -82,7 +82,7 @@ class Problema:
 		#--------------------
 
 		# T - Número de períodos
-		self.T = df.iat[3,1] 
+		self.T = int(df.iat[3,1])
 		#--------------------
 
 		# A - Capacidade de Armazenamento
